@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+</head>
+<body>
+    <h1>This is Home Page ...</h1>
+    <hr>
+    <p>Real time data count: <span id="ct"></span></p>
+    <script>
+        var ws = new WebSocket('ws://127.0.0.1:8000/ws/sc/')
+
+         ws.onopen = function(){
+            console.log('websocket connection open...');
+            ws.send('This is client...')
+        }
+
+        ws.onmessage = function(){
+            console.log('websocket recieve messages..',event);
+            var data = JSON.parse(event.data)
+            document.getElementById('ct').innerText=data.count
+            
+        }
+
+        ws.onerror = function(){
+            console.log('websocket Error occurred...', event);
+        }
+
+        ws.onclose = function(){
+            console.log('websocket close...',event);
+        } 
+
+       // user of event.... 
+
+       // ws.addEventListener('open',(event) => {
+       //     console.log("Websocket connection...",event);
+       //     ws.send('hi,message from client...')
+       // })
+       // ws.addEventListener('message',(event) =>{
+       //     console.log('websocket recieve messages...',event);
+       // })
+       // ws.addEventListener('error',(event) =>{
+       //     console.log('websocket recieve error occuered...',event);
+       // })
+       // ws.addEventListener('close',(event) =>{
+       //     console.log('websocket close messages...',event);
+       // })
+    </script>
+</body>
+</html>
