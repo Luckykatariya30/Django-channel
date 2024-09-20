@@ -3,6 +3,6 @@ from myapp import views
 
 
 urlpatterns = [
-    path('',views.home),
+    path('<str:groupname>/',views.home),
 ]
 
