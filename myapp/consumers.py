@@ -3,6 +3,8 @@ from channels.exceptions import StopConsumer
 from time import sleep
 import json
 from asgiref.sync import async_to_sync
+from .models import Chat,Group
+
 
 
 class MySyncConsumer(SyncConsumer):
@@ -84,12 +86,32 @@ class ChatAppSyncConsumer(SyncConsumer):
         
     def websocket_receive(self,event):
         print('this is client site to recieve message...',event['text'])
+        print('type of event[text]',type(event['text']))
+        
+        
+## SAVE CHATS IN DATABASE ###################
+    
+        group = Group.objects.get(group_name=self.group_name)
+        print('event....', event)
+        print('event....', event['text'])
+        print('type of event....', type(event))
+        print('type of event[text]....',type(event['text']))
+        
+        data = json.loads(event['text'])
+        actual_data= data['meg']
+        print('thsi is actual message.....',actual_data)
+        chat = Chat(group_name = group , contant = actual_data)
+        chat.save()
+        
+
+        ## MESSAGE SEND  IN  GROUP ...........
+        
         async_to_sync(self.channel_layer.group_send)(self.group_name,{
             'type':'chat.message',
             'message':event['text']
         })
     def chat_message(self,event):
-        print('event ....',event['message'])
+        print('event ....',event['message'])        
         self.send({
             'type':'websocket.send',
             'text': event['message']

@@ -12,7 +12,11 @@
     <p>Server Site: <span id="chat"></span></p>
     <br>
     <h2>Group's Name: {{groupname}}</h2>
-    <textarea  id="receive-message" cols="60" rows="10"></textarea><br><br>
+    <textarea  id="receive-message" cols="60" rows="10">
+        {% for chat in chats %}
+        {{chat.contant}}
+        {% endfor %}
+    </textarea><br><br>
     <input type="text"  id="input-send-message" size="64%"><br><br>
     <button type="submit" id="submit" value="send" style="background-color: blue; color:white;">submit</button>
 
@@ -75,7 +79,7 @@
 
         ws.onopen = function() {
             console.log('this is client site message...');
-            ws.send('this is client site message...')
+            //ws.send('this is client site message...')
         }
         ws.onmessage = function(event){
             console.log('this is recieve to server side message...',event);
